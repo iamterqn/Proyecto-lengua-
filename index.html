@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exposición Turística: Guerrero</title>
+    <style>
+        /* --- ESTILOS BASE Y PALETA DE COLORES --- */
+        :root {
+            --primary-blue: #1e3799; 
+            --secondary-blue: #4a69bd; 
+            --accent-orange: #f39c12; 
+            --light-bg: #fdf5e6; /* Color crema suave que no opaca la decoración */
+            --text-color: #333;
+            --footer-green: #27ae60; 
+            --vibrant-green: #2ecc71;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            margin: 0;
+            padding-top: 100px; 
+            /* Fondo crema suave con el patrón de puntos artesanal */
+            background-color: var(--light-bg);
+            background-image: radial-gradient(var(--secondary-blue) 0.5px, transparent 0.5px);
+            background-size: 30px 30px;
+            background-attachment: fixed;
+            transition: margin-left .5s;
+        }
+
+        /* --- BARRA SUPERIOR (Navbar) --- */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 80px; 
+            background-color: var(--primary-blue); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            padding: 0 25px;
+            box-sizing: border-box;
+            border-bottom: 6px ridge var(--accent-orange); 
+        }
+
+        .open-btn {
+            background: var(--accent-orange); 
+            color: white;
+            border: 2px solid white;
+            padding: 10px 18px;
+            border-radius: 25px; 
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 0px #d35400;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .open-btn:hover {
+            background: #e67e22; 
+            transform: scale(1.05);
+        }
+
+        .main-title {
+            color: white; 
+            font-family: 'Georgia', serif;
+            text-transform: uppercase;
+            margin: 0;
+            flex-grow: 1;
+            text-align: center;
+            font-size: 1.1rem; 
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* --- SEPARADORES FRONDOSOS --- */
+        .artisan-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 60px 0;
+            position: relative;
+        }
+        .artisan-divider::before, .artisan-divider::after {
+            content: "✿ ❀ ✿ ❀";
+            letter-spacing: 5px;
+            color: var(--secondary-blue);
+            font-size: 1.2rem;
+            flex: 1;
+            text-align: center;
+            border-bottom: 3px double var(--accent-orange);
+            margin: 0 20px;
+        }
+        .artisan-divider span { 
+            padding: 15px; 
+            font-size: 45px; 
+            color: var(--accent-orange); 
+            background: white;
+            border: 4px double var(--vibrant-green);
+            border-radius: 50%;
+            line-height: 1;
+            box-shadow: 0 0 15px rgba(243, 156, 18, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- CONTENEDORES Y TARJETAS --- */
+        .container {
+            width: 90%; max-width: 1050px; margin: auto;
+            background: rgba(255, 255, 255, 0.98); 
+            padding: 30px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1); 
+            border-radius: 20px; 
+            border: 2px solid var(--secondary-blue);
+            margin-bottom: 50px;
+        }
+
+        section { padding: 15px 0; scroll-margin-top: 110px; }
+
+        h2 {
+            color: var(--primary-blue); 
+            border-left: 10px solid var(--accent-orange); 
+            border-right: 10px solid var(--vibrant-green);
+            background: #fdfaf0;
+            padding: 15px;
+            text-transform: uppercase;
+            font-size: 1.8rem;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        h3 {
+            color: var(--secondary-blue); 
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        h3::before {
+            content: "❈";
+            margin-right: 10px;
+            color: var(--accent-orange);
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e1e8ed;
+            border-bottom: 4px solid var(--secondary-blue);
+            border-radius: 15px; 
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+        }
+
+        .card::after {
+            content: "";
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent-orange);
+            transform: rotate(45deg);
+            opacity: 0.2;
+        }
+
+        .video-container, .image-placeholder {
+            background: #f4f7f6; width: 100%; height: 280px;
+            display: flex; align-items: center; justify-content: center;
+            border: 3px dashed var(--vibrant-green); border-radius: 15px;
+            color: #636e72;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .tourist-category {
+            font-size: 2.2rem;
+            color: white;
+            text-align: center;
+            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+            padding: 20px;
+            margin: 45px 0 25px 0;
+            border-radius: 50px 0 50px 0;
+            border: 3px solid var(--accent-orange);
+            text-shadow: 2px 2px 0px var(--footer-green);
+        }
+
+        .site-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin: 30px 0 12px 10px;
+            text-decoration: none;
+            border-bottom: 3px solid var(--accent-orange);
+            display: inline-block;
+            padding-right: 20px;
+        }
+
+        .price-tag {
+            display: inline-block;
+            background: var(--footer-green); 
+            color: white;
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-size: 1rem;
+            margin-top: 15px;
+            font-weight: bold;
+            border: 2px solid white;
+        }
+
+        /* --- MENÚ LATERAL (Sidenav) --- */
+        .sidenav {
+            height: 100%; width: 0; position: fixed; z-index: 2000;
+            top: 0; left: 0; background-color: #1a252f; 
+            overflow-x: hidden; transition: 0.5s; padding-top: 80px;
+            border-right: 8px ridge var(--accent-orange);
+            box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+        }
+
+        .sidenav-header {
+            color: var(--accent-orange);
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-bottom: 2px double var(--vibrant-green);
+            padding-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .sidenav a { 
+            padding: 15px 25px; 
+            font-size: 18px; 
+            color: #ecf0f1; 
+            display: block; 
+            transition: 0.3s;
+            text-decoration: none;
+            border-left: 5px solid transparent;
+            margin: 5px 0;
+        }
+
+        .sidenav a:hover { 
+            color: white; 
+            background-color: #2c3e50;
+            border-left: 5px solid var(--vibrant-green);
+            padding-left: 35px;
+        }
+
+        .sidenav .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 45px;
+            color: var(--accent-orange);
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        /* PIE DE PÁGINA */
+        footer {
+            background: linear-gradient(var(--footer-green), #1e8449);
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+            border-top: 8px solid var(--accent-orange);
+        }
+
+        @media (min-width: 768px) { .main-title { font-size: 1.8rem; } }
+    </style>
+</head>
+<body>
+
+    <!-- Menú Lateral -->
+    <nav id="mySidenav" class="sidenav">
+        <div class="sidenav-header">Menú Regional</div>
+        <span class="close-btn" onclick="closeNav()">×</span>
+        <a href="#video-spot" onclick="closeNav()">✨ Presentación</a>
+        <a href="#datos-generales" onclick="closeNav()">📍 Datos Generales</a>
+        <a href="#costumbres-relevantes" onclick="closeNav()">🎭 Tradiciones</a>
+        <a href="#gastronomia" onclick="closeNav()">🍲 Gastronomía</a>
+        <a href="#musica" onclick="closeNav()">🎺 Música</a>
+        <a href="#turismo" onclick="closeNav()">🏖️ Lugares Turísticos</a>
+        <a href="#hospedaje" onclick="closeNav()">🏨 Hospedaje</a>
+        <a href="#biografias" onclick="closeNav()">👤 Biografías</a>
+    </nav>
+
+    <!-- Barra Superior -->
+    <header class="navbar">
+        <button class="open-btn" onclick="openNav()">☰ Índice</button>
+        <h1 class="main-title">Guerrero: El Sol de México</h1>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="container" id="main">
+        
+        <section id="video-spot">
+            <h2>Bienvenido a Guerrero</h2>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/UOJK_rv1-dc" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 25px; background: #fdfaf0; border-radius: 12px; border-left: 8px solid var(--primary-blue); border-right: 8px solid var(--accent-orange); box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <h3>Sobre esta página</h3>
+                <p style="font-size: 1.1rem; color: #444; text-align: justify; line-height: 1.8;">
+                    Explora la riqueza cultural del estado de <strong>Guerrero</strong> a través de este recorrido digital. En este sitio encontrarás información esencial sobre su <strong>geografía e historia</strong>, las <strong>tradiciones milenarias</strong> que dan identidad a sus pueblos, y una muestra de su vibrante <strong>gastronomía y música regional</strong>. Además, te ofrecemos una guía de los mejores <strong>destinos turísticos y opciones de hospedaje</strong> en el estado. Esta plataforma es una herramienta completa para estudiantes y viajeros interesados en descubrir por qué Guerrero es considerado el verdadero sol de México.
+                </p>
+            </div>
+        </section>
+
+        <div class="artisan-divider"><span>🌻</span></div>
+
+        <section id="datos-generales">
+            <h2>Datos Generales</h2>
+            <div class="card">
+                <p><strong>Ubicación Geográfica:</strong> Guerrero se sitúa en el sur de la República Mexicana, extendiéndose a lo largo de la costa del Océano Pacífico.</p>
+                <div class="image-placeholder"><p>[Mapa de Ubicación]</p></div>
+            </div>
+            
+            <div class="card" style="border-right: 5px solid var(--vibrant-green);">
+                <h3>Datos de Interés</h3>
+                <ul style="padding-left: 20px; list-style-type: '✧ ';">
+                    <li><strong>Origen del Nombre:</strong> Nombrado en honor al caudillo insurgente y presidente Vicente Guerrero Saldaña.</li>
+                    <li><strong>Clima Variado:</strong> Presenta desde climas tropicales en sus costas hasta climas templados en las zonas montañosas.</li>
+                    <li><strong>División Regional:</strong> El estado se divide en siete regiones: Acapulco, Costa Chica, Costa Grande, Centro, La Montaña, Norte y Tierra Caliente.</li>
+                    <li><strong>Capital Histórica:</strong> Chilpancingo de los Bravo es la sede de los "Sentimientos de la Nación".</li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="artisan-divider"><span>🐆</span></div>
+
+        <section id="costumbres-relevantes">
+            <h2>Costumbres y Tradiciones Relevantes</h2>
+            <div class="card">
+                <h3>1. La Tigrada de Chilapa</h3>
+                <p>Uso de máscaras de madera y trajes de jaguar para pedir lluvia.</p>
+                <div class="image-placeholder"><p>[Imagen: La Tigrada]</p></div>
+            </div>
+            <div class="card">
+                <h3>2. El Paseo del Pendón</h3>
+                <p>Anuncio de la feria de Chilpancingo con danzas regionales.</p>
+                <div class="image-placeholder"><p>[Imagen: El Pendón]</p></div>
+            </div>
+            <div class="card">
+                <h3>3. La Quema del Mal Humor</h3>
+                <p>Ritual festivo para purificar el ambiente antes de los carnavales.</p>
+                <div class="image-placeholder"><p>[Imagen: La Quema]</p></div>
+            </div>
+            <div class="card">
+                <h3>4. Día de Muertos en la Montaña</h3>
+                <p>Ofrendas monumentales con profundas raíces indígenas.</p>
+                <div class="image-placeholder"><p>[Imagen: Ofrendas]</p></div>
+            </div>
+        </section>
+
+        <div class="artisan-divider"><span>🌶️</span></div>
+
+        <section id="gastronomia">
+            <h2>Gastronomía</h2>
+            
+            <div class="card">
+                <h3>Pescado a la Talla</h3>
+                <p>Pescado abierto en mariposa, untado con salsa de chiles rojos y asado a las brasas.</p>
+                <div class="image-placeholder"><p>[Imagen: Pescado a la Talla]</p></div>
+            </div>
+
+            <div class="card">
+                <h3>Tamales Nejos</h3>
+                <p>Elaborados con masa de maíz cocida con ceniza, servidos típicamente con mole.</p>
+                <div class="image-placeholder"><p>[Imagen: Tamales Nejos]</p></div>
+            </div>
+
+            <div class="card">
+                <h3>Mole Rosa</h3>
+                <p>Platillo de Taxco con piñón, betabel y pétalos de rosa.</p>
+                <div class="image-placeholder"><p>[Imagen: Mole Rosa]</p></div>
+            </div>
+        </section>
+
+        <div class="artisan-divider"><span>🎺</span></div>
+
+        <section id="musica">
+            <h2>Música Regional</h2>
+            
+            <div class="card">
+                <h3>1. Sones de Tarima</h3>
+                <p>Zapateado rítmico sobre una caja de madera (tarima) originario de Tixtla.</p>
+                <div class="image-placeholder"><p>[Video Placeholder: Sones de Tarima]</p></div>
+            </div>
+
+            <div class="card">
+                <h3>2. Las Chilenas</h3>
+                <p>Música de la Costa Chica con influencia de marineros chilenos del siglo XIX.</p>
+                <div class="image-placeholder"><p>[Video Placeholder: Las Chilenas]</p></div>
+            </div>
+
+            <div class="card">
+                <h3>3. Bandas de Viento (Chile Frito)</h3>
+                <p>Agrupaciones populares que acompañan todas las fiestas y jaripeos del estado.</p>
+                <div class="image-placeholder"><p>[Video Placeholder: Banda de Viento]</p></div>
+            </div>
+        </section>
+
+        <div class="artisan-divider"><span>🏖️</span></div>
+
+        <section id="turismo">
+            <h2>Lugares para Visitar</h2>
+
+            <div class="tourist-category">Pueblos Mágicos</div>
+            <a href="#" class="site-name">Taxco de Alarcón</a>
+            <div class="image-placeholder"><p>[Imagen: Taxco]</p></div>
+            <a href="#" class="site-name">Ixcateopan de Cuauhtémoc</a>
+            <div class="image-placeholder"><p>[Imagen: Ixcateopan]</p></div>
+
+            <div class="tourist-category">Playas</div>
+            <a href="#" class="site-name">Acapulco</a>
+            <div class="image-placeholder"><p>[Imagen: Acapulco]</p></div>
+            <a href="#" class="site-name">Ixtapa y Zihuatanejo</a>
+            <div class="image-placeholder"><p>[Imagen: Ixtapa]</p></div>
+
+            <div class="tourist-category">Zonas Arqueológicas</div>
+            <a href="#" class="site-name">Tehuacalco</a>
+            <div class="image-placeholder"><p>[Imagen: Tehuacalco]</p></div>
+            <a href="#" class="site-name">La Organera-Xochipala</a>
+            <div class="image-placeholder"><p>[Imagen: Xochipala]</p></div>
+        </section>
+
+        <div class="artisan-divider"><span>🏨</span></div>
+
+        <section id="hospedaje">
+            <h2>Dónde hospedarse</h2>
+
+            <div class="tourist-category">Acapulco</div>
+            
+            <div class="card">
+                <h3>Hotel Princess Mundo Imperial</h3>
+                <p>Famoso resort de lujo con arquitectura piramidal frente a la Playa Diamante.</p>
+                <div class="image-placeholder"><p>[Imagen]</p></div>
+                <span class="price-tag">Precio aprox: $2,100 MXN</span>
+                <a href="https://www.princessmundoimperial.com/es/" target="_blank">Sitio Web Oficial</a>
+            </div>
+
+            <div class="card">
+                <h3>Krystal Beach Acapulco</h3>
+                <p>Ubicado en la zona dorada, ideal para familias con vista a la bahía.</p>
+                <div class="image-placeholder"><p>[Imagen]</p></div>
+                <span class="price-tag">Precio aprox: $1,400 MXN</span>
+                <a href="https://www.krystalbeach-acapulco.com/es/" target="_blank">Sitio Web Oficial</a>
+            </div>
+
+            <div class="tourist-category">Taxco</div>
+
+            <div class="card">
+                <h3>Hotel Montetaxco</h3>
+                <p>En la cima de la montaña, con teleférico y vistas panorámicas únicas.</p>
+                <div class="image-placeholder"><p>[Imagen]</p></div>
+                <span class="price-tag">Precio aprox: $1,600 MXN</span>
+                <a href="http://www.montetaxco.mx/" target="_blank">Sitio Web Oficial</a>
+            </div>
+
+            <div class="card">
+                <h3>Hotel Villabello</h3>
+                <p>Hotel con encanto colonial y ambiente tranquilo.</p>
+                <div class="image-placeholder"><p>[Imagen]</p></div>
+                <span class="price-tag">Precio aprox: $1,200 MXN</span>
+                <a href="https://www.hotelvillabellataxco.com/" target="_blank">Sitio Web Oficial</a>
+            </div>
+        </section>
+
+        <div class="artisan-divider"><span>👤</span></div>
+
+        <section id="biografias">
+            <h2>Biografías</h2>
+            
+            <div class="card">
+                <h3>Ian</h3>
+                <p>Ian nació en el Estado de México en 2008 actualmente cursa la preparatoria y destaca por su interés tecnológico.</p>
+            </div>
+
+            <div class="card">
+                <h3>Mitzi Vega</h3>
+                <p>Mitzi Vega nació el 2007 en el Estado de México actualmente cursando la preparatoria y queriendo ser ingeniera en un futuro.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Pie de Página -->
+    <footer>
+        <div style="font-size: 2.5rem; margin-bottom: 15px;">🏺 🇲🇽 🏺</div>
+        <p>© 2023 Exposición Turística de Guerrero.</p>
+        <p>Orgullosamente celebrando la cultura y el <span style="color: var(--accent-orange); font-weight: bold;">Sol de México</span>.</p>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        function openNav() {
+            document.getElemen
